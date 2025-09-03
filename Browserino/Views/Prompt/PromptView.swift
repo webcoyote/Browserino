@@ -165,6 +165,7 @@ struct PromptView: View {
                         opacityAnimation = 1
                     }
                 }
+                .scrollEdgeEffectDisabledCompat()
             }
             
             Divider()

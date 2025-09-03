@@ -14,6 +14,9 @@ struct PromptView: View {
     @AppStorage("apps") private var apps: [App] = []
     @AppStorage("shortcuts") private var shortcuts: [String: String] = [:]
     
+    @AppStorage("copy_closeAfterCopy") private var closeAfterCopy: Bool = false
+    @AppStorage("copy_alternativeShortcut") private var alternativeShortcut: Bool = false
+    
     let urls: [URL]
     
     @State private var opacityAnimation = 0.0
@@ -171,6 +174,10 @@ struct PromptView: View {
                     let pasteboard = NSPasteboard.general
                     pasteboard.declareTypes([.string], owner: nil)
                     pasteboard.setString(urls.first?.absoluteString ?? "", forType: .string)
+                    
+                    if (closeAfterCopy) {
+                        NSApplication.shared.keyWindow?.close()
+                    }
                 }) {
                     Text(
                         host
@@ -179,7 +186,7 @@ struct PromptView: View {
                 .buttonStyle(.plain)
                 .keyboardShortcut(
                     KeyEquivalent("c"),
-                    modifiers: [.command, .option]
+                    modifiers: alternativeShortcut ? [.command] : [.command, .option]
                 )
             }
         }

@@ -10,6 +10,8 @@ import SwiftUI
 struct GeneralTab: View {
     @State private var isDefault = false
     @AppStorage("browsers") private var browsers: [URL] = []
+    @AppStorage("copy_closeAfterCopy") private var closeAfterCopy: Bool = false
+    @AppStorage("copy_alternativeShortcut") private var alternativeShortcut: Bool = false
     
     func defaultBrowser() -> String? {
         guard let browserUrl = NSWorkspace.shared.urlForApplication(toOpen: URL(string: "https:")!) else {
@@ -62,6 +64,26 @@ struct GeneralTab: View {
                     Text("Rescan list of installed browsers")
                         .font(.callout)
                         .opacity(0.5)
+                }
+            }
+            
+            HStack(alignment: .top, spacing: 32) {
+                Text("Copy URL")
+                    .font(.headline)
+                    .frame(width: 200, alignment: .trailing)
+                
+                VStack(alignment: .leading) {
+                    Toggle(isOn: $closeAfterCopy) {
+                        Text("Close prompt view after copying URL")
+                            .font(.callout)
+                            .opacity(0.5)
+                    }
+                    
+                    Toggle(isOn: $alternativeShortcut) {
+                        Text("Use Command+C instead of Command+Option+C")
+                            .font(.callout)
+                            .opacity(0.5)
+                    }
                 }
             }
             

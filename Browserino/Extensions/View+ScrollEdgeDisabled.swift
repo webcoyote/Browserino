@@ -10,6 +10,7 @@ import SwiftUI
 extension View {
     @ViewBuilder
     func scrollEdgeEffectDisabledCompat() -> some View {
+        #if FUTURE_APIS_ENABLED
         if #available(macOS 26.0, *) {
             self
                 .scrollEdgeEffectStyle(.soft, for: .all)
@@ -17,5 +18,8 @@ extension View {
         } else {
             self
         }
+        #else
+        self
+        #endif
     }
 }

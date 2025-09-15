@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Run the project without building it
+set -Eeuo pipefail
+trap 'echo "${BASH_SOURCE[0]}: line $LINENO: $BASH_COMMAND: exitcode $?"' ERR
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR/.."
+
+# Find the application
+APP_PATH=".DerivedData/Browserino/Build/Products/Debug/Browserino.app/Contents/MacOS/Browserino"
+if [[ ! -x "$APP_PATH" ]]; then
+    echo "❌ Could not find built app at: $APP_PATH"
+    echo "   Run 'scripts/build' first to build the app"
+    exit 1
+fi
+
+"$APP_PATH" "$@" & disown

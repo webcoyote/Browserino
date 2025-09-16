@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# Build the project
+set -Eeuo pipefail
+trap 'echo "${BASH_SOURCE[0]}: line $LINENO: $BASH_COMMAND: exitcode $?"' ERR
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR/.."
+
+# Check if app is built
+APP_PATH=".DerivedData/Browserino/Build/Products/Debug/Browserino.app"
+if [ ! -d "$APP_PATH" ]; then
+    echo "❌ App not built. Run 'scripts/build' first."
+    exit 1
+fi
+
+# Install to /Applications
+echo "Installing to /Applications..."
+rm -rf /Applications/Browserino.app 2>/dev/null || true
+cp -R "$APP_PATH" /Applications/
+
+# Register with Launch Services
+/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -f /Applications/Browserino.app
+
+# Launch the app
+open /Applications/Browserino.app
+
+echo "✅ Installed! Open Preferences to set as default browser."

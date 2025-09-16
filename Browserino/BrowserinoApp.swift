@@ -17,6 +17,16 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     var statusBarItem: NSStatusItem!
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
+        // Kill any existing instances of Browserino
+        let runningApps = NSWorkspace.shared.runningApplications
+        let currentPID = ProcessInfo.processInfo.processIdentifier
+
+        for app in runningApps {
+            if app.bundleIdentifier == Bundle.main.bundleIdentifier && app.processIdentifier != currentPID {
+                app.terminate()
+            }
+        }
+
         statusBarItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         let statusButton = statusBarItem!.button
         statusButton!.image = NSImage.menuIcon
